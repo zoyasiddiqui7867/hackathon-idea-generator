@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Home from './pages/Home.jsx';
+import home from './pages/Home.jsx';
 import Navbar from './components/Navbar.jsx';
 import IdeaGenerator from './pages/IdeaGenerator.jsx' ;
 import SavedIdeas from './pages/SavedIdeas.jsx';
