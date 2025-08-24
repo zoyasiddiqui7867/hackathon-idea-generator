@@ -64,7 +64,7 @@ function ExploreIdeas() {
             <p className="text-gray-600 text-sm flex-grow mb-4">{idea.description}</p>
             
             <div className="mt-auto pt-4 border-t border-gray-200">
-              <span className="bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+              <span className="bg-gray-600 text-white text-xs font-bold px-2 py-1 rounded-full">
                 {idea.category}
               </span>
             </div>
