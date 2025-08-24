@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import Navbar from './components/Navbar';
-import Home from './pages/Home';
-import IdeaGenerator from './pages/IdeaGenerator';
-import ExploreIdeas from './pages/ExploreIdeas';
-import AboutUs from './pages/AboutUs';
-import Footer from './components/Footer';
+import Navbar from './components/Navbar.jsx'; 
+import Home from './pages/home.jsx'; 
+import IdeaGenerator from './pages/IdeaGenerator.jsx';
+import ExploreIdeas from './pages/ExploreIdeas.jsx'; 
+import AboutUs from './pages/AboutUs.jsx'; 
+import Footer from './components/Footer.jsx'; 
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
