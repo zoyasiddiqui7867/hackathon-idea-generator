@@ -1,99 +1,104 @@
+
 import React, { useState } from "react";
 
 function IdeaGenerator() {
-  // state for input 
-  const [skills, setSkills] = useState("");
-  const [interests, setInterests] = useState("");
-  const [domain, setDomain] = useState("");
-
-  // state for ideas
+  const [query, setQuery] = useState("");
+  const [ideas, setIdeas] = useState("");
   const [loading, setLoading] = useState(false);
-  const [ideas, setIdeas] = useState([]);
   const [error, setError] = useState(null);
 
+  const generateIdeas = async () => {
+    if (!query) {
+      setIdeas("");
+      setError("⚠️ Please enter a query first.");
+      return;
+    }
+
+    setLoading(true);
+    setIdeas("");
+    setError(null);
+
+    // Construct a search query for the GitHub API
+    // We'll search for repositories matching the user's query
+    const apiUrl = `https://api.github.com/search/repositories?q=${encodeURIComponent(query)}`;
+
+    try {
+      const response = await fetch(apiUrl);
+      
+      if (!response.ok) {
+        throw new Error(`GitHub API call failed with status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      
+      if (result.items && result.items.length > 0) {
+        // Format the results into a readable list
+        const formattedIdeas = result.items
+          .slice(0, 5) // Get the top 5 results
+          .map(item => `- ${item.name}: ${item.description || "No description available."}`)
+          .join('\n');
+        
+        setIdeas(formattedIdeas);
+      } else {
+        setError("⚠️ No projects found for your query. Please try a different topic.");
+      }
+    } catch (err) {
+      console.error("GitHub API Error:", err);
+      setError("❌ An error occurred while fetching projects. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen p-8 bg-gray-950">
-      <h1 className="text-4xl font-extrabold text-white mb-6">
-        Generate a Hackathon Project Idea
+    <div className="p-6 max-w-2xl mx-auto text-center bg-gray-100 min-h-screen">
+      <h1 className="text-3xl font-extrabold mb-6-gray-900">
+        Hackathon Project Finder
       </h1>
-      <p className="text-lg text-gray-400 text-center mb-10 max-w-2xl">
-        Enter your skills and interests below to get unique, AI-powered project ideas.
+
+      <p className="text-lg text-gray-600 mb-8">
+        Enter keywords like 'AI ,ML, Robotics' to find existing projects on GitHub.
       </p>
 
-      {/* Input Form Section */}
-      <div className="w-full max-w-4xl bg-gray-900 rounded-xl shadow-lg p-8 mb-12">
-        <div className="space-y-6">
-          {/* Skills Input */}
-          <div>
-            <label htmlFor="skills" className="block text-sm font-medium text-gray-300 mb-2">
-              Your Skills (e.g., React, Python, UI/UX)
-            </label>
-            <input
-              type="text"
-              id="skills"
-              value={skills}
-              onChange={(e) => setSkills(e.target.value)}
-              className="w-full px-4 py-2 bg-gray-800 text-white rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              placeholder="React, Tailwind, Node.js"
-            />
-          </div>
-
-          {/* Interests Input */}
-          <div>
-            <label htmlFor="interests" className="block text-sm font-medium text-gray-300 mb-2">
-              Interests (e.g., AI/ML, Fintech)
-            </label>
-            <input
-              type="text"
-              id="interests"
-              value={interests}
-              onChange={(e) => setInterests(e.target.value)}
-              className="w-full px-4 py-2 bg-gray-800 text-white rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              placeholder="AI, E-commerce, Social Media"
-            />
-          </div>
-
-          {/* Domain Dropdown */}
-          <div>
-            <label htmlFor="domain" className="block text-sm font-medium text-gray-300 mb-2">
-              Project Domain
-            </label>
-            <select
-              id="domain"
-              value={domain}
-              onChange={(e) => setDomain(e.target.value)}
-              className="w-full px-4 py-2 bg-gray-800 text-white rounded-lg border border-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
-            >
-              <option value="">Select a domain</option>
-              <option value="web">Web Development</option>
-              <option value="ai">AI / Machine Learning</option>
-              <option value="fintech">Fintech</option>
-              <option value="ecommerce">E-commerce</option>
-              <option value="mobility">Mobility / Logistics</option>
-            </select>
-          </div>
-
-          {/* Generate Button */}
-          <div className="flex justify-center pt-4">
-            <button
-              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-3 px-10 rounded-full shadow-lg transition-transform transform hover:scale-105"
-            >
-              Generate Ideas
-            </button>
-          </div>
-        </div>
+      <div className="flex flex-col md:flex-row gap-3 mb-6">
+        <input
+          type="text"
+          placeholder="e.g. AI, ML, Robotics"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          className="border border-gray-300 p-3 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <button
+          onClick={generateIdeas}
+          disabled={loading}
+          className="bg-gray-900 hover:bg-black text-white font-semibold px-6 py-3 rounded-lg transition disabled:opacity-50"
+        >
+          {loading ? "Searching..." : "Search GitHub"}
+        </button>
       </div>
 
-      {/* AI-Generated Ideas Display Section (Static for now) */}
-      <div className="w-full max-w-4xl">
-        <h2 className="text-2xl font-bold text-gray-300 mb-4 text-center">
-          Generated Ideas
-        </h2>
-        {/* Placeholder for future generated ideas */}
-        <div className="bg-gray-800 rounded-xl p-8 text-center text-gray-500 italic">
-          Your AI-powered hackathon ideas will appear here.
+      {loading && (
+        <div className="mt-6">
+          <p className="text-lg text-gray-600 animate-pulse">
+            Searching for projects...
+          </p>
         </div>
-      </div>
+      )}
+      
+      {ideas && (
+        <div className="mt-6 p-6 bg-white border rounded-lg text-left shadow-md">
+          <h2 className="text-lg font-semibold text-gray-800 mb-2">
+            Found Projects:
+          </h2>
+          <pre className="text-gray-700 whitespace-pre-line">{ideas}</pre>
+        </div>
+      )}
+
+      {error && (
+        <div className="mt-6 p-4 bg-red-100 text-red-700 rounded-lg shadow-md text-left">
+          <p>{error}</p>
+        </div>
+      )}
     </div>
   );
 }
