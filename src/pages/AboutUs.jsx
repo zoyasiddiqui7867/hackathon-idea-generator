@@ -28,7 +28,7 @@ function About() {
       <div className="max-w-4xl mx-auto text-center">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">About ThinkBot</h1>
         <p className="text-lg text-gray-600 mb-8">
-          ThinkBot is your AI companion for generating innovative hackathon ideas. We believe in the power of technology to inspire creativity and accelerate innovation.
+          ThinkBot is your companion for generating innovative hackathon ideas. We believe in the power of technology to inspire creativity and accelerate innovation.
         </p>
 
         <div className="mt-12 bg-white p-8 rounded-xl shadow-lg text-left">
