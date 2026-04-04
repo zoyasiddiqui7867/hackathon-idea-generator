@@ -1,7 +1,10 @@
 # 🚀 Hackathon Idea Generator
 
-A simple and powerful tool that helps developers generate innovative and practical hackathon project ideas instantly. Whether you're a beginner or an experienced developer, this tool helps you overcome "what to build?" and jump straight into creating.
+A simple and powerful tool that helps developers generate innovative and practical hackathon project ideas instantly. Whether you're a beginner or an experienced developer, this tool helps you overcome "what to build?" and jump straight into creating. 
 
+
+Live Project
+👉 https://hackathon-idea-finder.vercel.app/
 ---
 
 ## ✨ Features
